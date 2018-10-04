@@ -1,5 +1,6 @@
 package com.codecool.termlib;
 import java.util.*;
+import java.lang.*;
 
 
 public class Terminal {
@@ -8,8 +9,22 @@ public class Terminal {
      */
     // HINT: In \033 the '0' means it's an octal number. And 33 in octal equals 0x1B in hexadecimal.
     // Now you have some info to decode that page where the control codes are explained ;)
-
-	private static int vertical = 25;
+	
+	private static final String HEADER = "\033[1;1H\33[37m"
+	+"				888b    888 d8b       888888                                 8888888b. 8888888 Y88b   d88P 8888888888 888             d8888 8888888b. 88888888888\n"
+	+"				8888b   888 Y8P          88b                                 888   Y88b  888    Y88b d88P  888        888            d88888 888   Y88b    888     \n"
+	+"				88888b  888              888                                 888    888  888     Y88o88P   888        888           d88P888 888    888    888     \n"
+	+"				888Y88b 888 888 88888b.  888  8888b.  888  888  8888b.       888   d88P  888      Y888P    8888888    888          d88P 888 888   d88P    888     \n"
+	+"				888 Y88b888 888 888  88b 888      88b 888  888      88b      8888888P    888      d888b    888        888         d88P  888 8888888P      888     \n"
+	+"				888  Y88888 888 888  888 888 .d888888 Y88  88P .d888888      888         888     d88888b   888        888        d88P   888 888 T88b      888     \n"
+	+"				888   Y8888 888 888  888 88P 888  888  Y8bd8P  888  888      888         888    d88P Y88b  888        888       d8888888888 888  T88b     888     \n"
+	+"				888    Y888 888 888  888 888  Y888888   Y88P    Y888888      888       8888888 d88P   Y88b 8888888888 88888888 d88P     888 888   T88b    888     \n"
+	+"						       .d88P                                                                                                                      \n"
+	+"						     .d88P                                                                                                                       \n"
+	+"						    888P										Move: a w s d   Point: q   Pencil: l   Undo: n									\n"
+	+"		   _____________________________________________________________________________________________________________________________________________________________________";
+	
+	private static int vertical = 30;
 	private static int horizontal = 100;
 	//private static String cordinate = Integer.toString(vertical) +";"+ Integer.toString(horizontal);
 	
@@ -46,6 +61,9 @@ public class Terminal {
 	private static String color = CONTROL_CODE + "37" +STYLE;
 	
 	private static String pencil = BLOCK;
+	
+	
+	private static String outPut = CONTROL_CODE+CLEAR + HEADER;
     
 	public void resetStyle() {
     }
@@ -56,7 +74,10 @@ public class Terminal {
      * Might reset cursor position.
      */
     public void clearScreen() {
-		System.out.print(CONTROL_CODE+CLEAR+CONTROL_CODE+"25;100H");
+		outPut = CONTROL_CODE+CLEAR + HEADER;
+		vertical = 30;
+		horizontal = 100;
+		command(CONTROL_CODE+CLEAR+HEADER+CONTROL_CODE+Integer.toString(vertical) +";"+ Integer.toString(horizontal)+MOVE);
     }
 
     /**
@@ -147,9 +168,12 @@ public class Terminal {
 		
 		switch (direction) {
             case UP:
-                Terminal.vertical -= amount;
-                break;
-                    
+				if (vertical >= 14){
+					Terminal.vertical -= amount;
+					break;
+				} else {
+					vertical = 12;
+				}
             case DOWN:
                 Terminal.vertical += amount;
                 break;
@@ -199,15 +223,16 @@ public class Terminal {
 	}
 	
 	public void printer(){
-		String outPut = CONTROL_CODE+CLEAR;
-		System.out.print(CONTROL_CODE+CLEAR+CONTROL_CODE+Integer.toString(vertical) +";"+ Integer.toString(horizontal)+MOVE);
+		//String outPut = CONTROL_CODE+CLEAR + HEADER;
+		System.out.print(CONTROL_CODE+CLEAR+HEADER+CONTROL_CODE+Integer.toString(vertical) +";"+ Integer.toString(horizontal)+MOVE);
 		
 		Scanner scanner = new Scanner(System.in);
 		while(true){
 			
 			String input = scanner.nextLine();
 
-			if(input.equals("quit")) break;
+			if (input.equals("quit")) break;
+			if (input.equals("clear")) clearScreen();
 			if (input.equals("w")) moveCursor(Direction.UP, 1);
 			if (input.equals("s")) moveCursor(Direction.DOWN, 1);
 			if (input.equals("a")) moveCursor(Direction.BACKWARD, 1);
