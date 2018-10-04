@@ -1,6 +1,9 @@
 package com.codecool.termlib;
 import java.util.*;
 import java.lang.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class Terminal {
@@ -21,7 +24,7 @@ public class Terminal {
 	+"				888    Y888 888 888  888 888  Y888888   Y88P    Y888888      888       8888888 d88P   Y88b 8888888888 88888888 d88P     888 888   T88b    888     \n"
 	+"						       .d88P                                                                                                                      \n"
 	+"						     .d88P                                                                                                                       \n"
-	+"						    888P										Move: a w s d   Point: q   Pencil: l   Undo: n									\n"
+	+"						    888P						type: save || load || clear	Move: a w s d   Point: q   Pencil: l   Undo: n							\n"
 	+"		   _____________________________________________________________________________________________________________________________________________________________________";
 	
 	private static int vertical = 30;
@@ -222,6 +225,33 @@ public class Terminal {
 		}
 	}
 	
+	
+	private void saveArt(){
+		try {
+			File file = new File("art.txt");
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(outPut.substring(HEADER.length()+4));
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadArt(){
+		String temp = "";
+		File file = new File("art.txt");
+		try{
+		Scanner sc = new Scanner(file); 
+  
+		while (sc.hasNextLine()) 
+			temp += sc.nextLine();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		outPut = CONTROL_CODE+CLEAR+HEADER+temp;
+	}
+	
 	public void printer(){
 		//String outPut = CONTROL_CODE+CLEAR + HEADER;
 		System.out.print(CONTROL_CODE+CLEAR+HEADER+CONTROL_CODE+Integer.toString(vertical) +";"+ Integer.toString(horizontal)+MOVE);
@@ -233,6 +263,8 @@ public class Terminal {
 
 			if (input.equals("quit")) break;
 			if (input.equals("clear")) clearScreen();
+			if (input.equals("save")) saveArt();
+			if (input.equals("load")) loadArt();
 			if (input.equals("w")) moveCursor(Direction.UP, 1);
 			if (input.equals("s")) moveCursor(Direction.DOWN, 1);
 			if (input.equals("a")) moveCursor(Direction.BACKWARD, 1);
