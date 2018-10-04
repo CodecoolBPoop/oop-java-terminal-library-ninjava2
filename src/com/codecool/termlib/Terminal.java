@@ -11,8 +11,6 @@ public class Terminal {
 
 	private static int vertical = 25;
 	private static int horizontal = 100;
-	private static String color = "";
-	
 	
 	private static final String BLOCK = "\u2588";
 	
@@ -42,7 +40,11 @@ public class Terminal {
      * Reset the color, background color, and any other style
      * (i.e.: underlined, dim, bright) to the terminal defaults.
      */
-    public void resetStyle() {
+	 
+	
+	private static String color = CONTROL_CODE + "37" +STYLE;
+    
+	public void resetStyle() {
     }
 
     /**
@@ -81,7 +83,7 @@ public class Terminal {
                 break;
                     
             case WHITE:
-                Terminal.color = CONTROL_CODE + "37" +STYLE;;
+                Terminal.color = CONTROL_CODE + "37" +STYLE;
                 break;
                          
             case GREEN:
@@ -89,7 +91,7 @@ public class Terminal {
                 break;
                     
             case YELLOW:
-                Terminal.color = CONTROL_CODE + "33" +STYLE;;
+                Terminal.color = CONTROL_CODE + "33" +STYLE;
                 break;
 			
 			case BLUE:
@@ -97,14 +99,14 @@ public class Terminal {
                 break;
                     
             case MAGENTA:
-                Terminal.color = CONTROL_CODE + "35" +STYLE;;
+                Terminal.color = CONTROL_CODE + "35" +STYLE;
                 break;
 			case CYAN:
                 Terminal.color = CONTROL_CODE + "36" +STYLE;
                 break;
                     
             case BLACK:
-                Terminal.color = CONTROL_CODE + "30" +STYLE;;
+                Terminal.color = CONTROL_CODE + "30" +STYLE;
                 break;
         }
     }
@@ -216,6 +218,37 @@ public class Terminal {
 				outPut += testy;
 			
 				command(outPut);
+			}
+			if (input.equals("n")) {
+				String copiedOutPut = outPut;				
+				int lastIndexBeforeColor = outPut.lastIndexOf("H");
+				if (lastIndexBeforeColor == outPut.length() - 1) {
+					int vmi = outPut.lastIndexOf("\u2588");
+					int uj = vmi - 1;
+					String newundo = "";
+					for (int i = 0; i < outPut.length(); i++){
+						if (i != uj) {
+							newundo += outPut.charAt(i);
+						} else {
+							newundo += "H";							
+							break;					
+						}
+					}		
+					outPut = newundo;				
+					System.out.print(outPut);
+				} else {
+					int firstIndexOfColor = lastIndexBeforeColor + 1;
+					String undo = "";
+					for (int i = 0; i < outPut.length(); i++){
+						if (i != firstIndexOfColor) {
+							undo += outPut.charAt(i);
+						} else {
+							break;					
+						}
+					}		
+					outPut = undo;				
+					System.out.print(outPut);
+				}
 			}
 			
 			
