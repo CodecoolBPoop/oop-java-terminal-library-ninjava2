@@ -175,6 +175,37 @@ public class Terminal {
 			
 				command(outPut);
 			}
+			if (input.equals("n")) {
+				String copiedOutPut = outPut;				
+				int lastIndexBeforeColor = outPut.lastIndexOf("H");
+				if (lastIndexBeforeColor == outPut.length() - 1) {
+					int vmi = outPut.lastIndexOf("\u2588");
+					int uj = vmi - 1;
+					String newundo = "";
+					for (int i = 0; i < outPut.length(); i++){
+						if (i != uj) {
+							newundo += outPut.charAt(i);
+						} else {
+							newundo += "H";							
+							break;					
+						}
+					}		
+					outPut = newundo;				
+					System.out.print(outPut);
+				} else {
+					int firstIndexOfColor = lastIndexBeforeColor + 1;
+					String undo = "";
+					for (int i = 0; i < outPut.length(); i++){
+						if (i != firstIndexOfColor) {
+							undo += outPut.charAt(i);
+						} else {
+							break;					
+						}
+					}		
+					outPut = undo;				
+					System.out.print(outPut);
+				}
+			}
 			
 			
 		}
