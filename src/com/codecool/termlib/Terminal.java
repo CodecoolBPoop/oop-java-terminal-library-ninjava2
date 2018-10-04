@@ -11,6 +11,7 @@ public class Terminal {
 
 	private static int vertical = 25;
 	private static int horizontal = 100;
+	private static String color = "";
 	
 	
 	private static final String BLOCK = "\u2588";
@@ -73,6 +74,38 @@ public class Terminal {
      * @param color The color to set.
      */
     public void setColor(Color color) {
+		switch (color) {
+            case RED:
+                Terminal.color = CONTROL_CODE + "31" +STYLE;
+                break;
+                    
+            case WHITE:
+                Terminal.color = CONTROL_CODE + "37" +STYLE;;
+                break;
+                         
+            case GREEN:
+                Terminal.color = CONTROL_CODE + "32" +STYLE;
+                break;
+                    
+            case YELLOW:
+                Terminal.color = CONTROL_CODE + "33" +STYLE;;
+                break;
+			
+			case BLUE:
+                Terminal.color = CONTROL_CODE + "34" +STYLE;
+                break;
+                    
+            case MAGENTA:
+                Terminal.color = CONTROL_CODE + "35" +STYLE;;
+                break;
+			case CYAN:
+                Terminal.color = CONTROL_CODE + "36" +STYLE;
+                break;
+                    
+            case BLACK:
+                Terminal.color = CONTROL_CODE + "30" +STYLE;;
+                break;
+        }
     }
 
     /**
@@ -165,12 +198,20 @@ public class Terminal {
 			if (input.equals("s")) moveCursor(Direction.DOWN, 1);
 			if (input.equals("a")) moveCursor(Direction.BACKWARD, 1);
 			if (input.equals("d"))  moveCursor(Direction.FORWARD, 1);
+			if (input.equals("red")) setColor(Color.RED);
+			if (input.equals("white")) setColor(Color.WHITE);
+			if (input.equals("green")) setColor(Color.GREEN);
+			if (input.equals("yellow")) setColor(Color.YELLOW);
+			if (input.equals("blue")) setColor(Color.BLUE);
+			if (input.equals("magenta")) setColor(Color.MAGENTA);
+			if (input.equals("cyan")) setColor(Color.CYAN);
+			if (input.equals("black")) setColor(Color.BLACK);
 			
 			String cordinate = Integer.toString(vertical) +";"+ Integer.toString(horizontal);
 			command(outPut);
 			command(CONTROL_CODE + cordinate + MOVE);
 			if (input.equals("q")){
-				String testy = CONTROL_CODE + cordinate + MOVE +BLOCK;
+				String testy = color + CONTROL_CODE + cordinate + MOVE +BLOCK;
 				outPut += testy;
 			
 				command(outPut);
@@ -179,5 +220,5 @@ public class Terminal {
 			
 		}
 		System.out.println("quited");
-}
+	}
 }
