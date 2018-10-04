@@ -74,6 +74,7 @@ public class Terminal {
      * @param color The color to set.
      */
     public void setColor(Color color) {
+		
 		switch (color) {
             case RED:
                 Terminal.color = CONTROL_CODE + "31" +STYLE;
