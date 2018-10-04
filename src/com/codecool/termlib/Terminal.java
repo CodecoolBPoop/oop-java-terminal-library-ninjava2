@@ -1,4 +1,6 @@
 package com.codecool.termlib;
+import java.util.*;
+
 
 public class Terminal {
     /**
@@ -6,6 +8,14 @@ public class Terminal {
      */
     // HINT: In \033 the '0' means it's an octal number. And 33 in octal equals 0x1B in hexadecimal.
     // Now you have some info to decode that page where the control codes are explained ;)
+
+	private static int vertical = 25;
+	private static int horizontal = 100;
+	
+	
+	private static final String BLOCK = "\u2588";
+	
+	
     private static final String CONTROL_CODE = "\033[";
     /**
      * Command for whole screen clearing.
@@ -40,6 +50,7 @@ public class Terminal {
      * Might reset cursor position.
      */
     public void clearScreen() {
+		System.out.print(CONTROL_CODE+CLEAR+CONTROL_CODE+"25;100H");
     }
 
     /**
@@ -94,6 +105,25 @@ public class Terminal {
      * @param amount Step the cursor this many times.
      */
     public void moveCursor(Direction direction, Integer amount) {
+		
+		switch (direction) {
+            case UP:
+                Terminal.vertical -= amount;
+                break;
+                    
+            case DOWN:
+                Terminal.vertical += amount;
+                break;
+                         
+            case BACKWARD:
+                Terminal.horizontal -= amount;
+                break;
+                        
+            case FORWARD:
+                Terminal.horizontal += amount;
+                break;
+        }
+		
     }
 
     /**
@@ -118,5 +148,36 @@ public class Terminal {
      * @param commandString The unique part of a command sequence.
      */
     private void command(String commandString) {
+		System.out.print(commandString);
     }
+	
+	public void printer(){
+		String outPut = CONTROL_CODE+CLEAR;
+		System.out.print(CONTROL_CODE+CLEAR+CONTROL_CODE+Integer.toString(vertical) +";"+ Integer.toString(horizontal)+MOVE);
+		
+		Scanner scanner = new Scanner(System.in);
+		while(true){
+			
+			String input = scanner.nextLine();
+
+			if(input.equals("quit")) break;
+			if (input.equals("w")) moveCursor(Direction.UP, 1);
+			if (input.equals("s")) moveCursor(Direction.DOWN, 1);
+			if (input.equals("a")) moveCursor(Direction.BACKWARD, 1);
+			if (input.equals("d"))  moveCursor(Direction.FORWARD, 1);
+			
+			String cordinate = Integer.toString(vertical) +";"+ Integer.toString(horizontal);
+			command(outPut);
+			command(CONTROL_CODE + cordinate + MOVE);
+			if (input.equals("q")){
+				String testy = CONTROL_CODE + cordinate + MOVE +BLOCK;
+				outPut += testy;
+			
+				command(outPut);
+			}
+			
+			
+		}
+		System.out.println("quited");
+}
 }
