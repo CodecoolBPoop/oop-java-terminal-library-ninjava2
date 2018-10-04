@@ -11,6 +11,7 @@ public class Terminal {
 
 	private static int vertical = 25;
 	private static int horizontal = 100;
+	//private static String cordinate = Integer.toString(vertical) +";"+ Integer.toString(horizontal);
 	
 	private static final String BLOCK = "\u2588";
 	
@@ -43,6 +44,8 @@ public class Terminal {
 	 
 	
 	private static String color = CONTROL_CODE + "37" +STYLE;
+	
+	private static String pencil = BLOCK;
     
 	public void resetStyle() {
     }
@@ -187,6 +190,14 @@ public class Terminal {
 		System.out.print(commandString);
     }
 	
+	private void setPencil(){
+		if (pencil.contains(BLOCK)){
+			pencil = "";
+		} else {
+			pencil = BLOCK;
+		}
+	}
+	
 	public void printer(){
 		String outPut = CONTROL_CODE+CLEAR;
 		System.out.print(CONTROL_CODE+CLEAR+CONTROL_CODE+Integer.toString(vertical) +";"+ Integer.toString(horizontal)+MOVE);
@@ -211,14 +222,17 @@ public class Terminal {
 			if (input.equals("black")) setColor(Color.BLACK);
 			
 			String cordinate = Integer.toString(vertical) +";"+ Integer.toString(horizontal);
+			if (input.equals("l")) setPencil();
+			outPut += color + CONTROL_CODE + cordinate + MOVE +pencil;
 			command(outPut);
-			command(CONTROL_CODE + cordinate + MOVE);
+
 			if (input.equals("q")){
 				String testy = color + CONTROL_CODE + cordinate + MOVE +BLOCK;
 				outPut += testy;
 			
 				command(outPut);
 			}
+			
 			if (input.equals("n")) {
 				String copiedOutPut = outPut;				
 				int lastIndexBeforeColor = outPut.lastIndexOf("H");
