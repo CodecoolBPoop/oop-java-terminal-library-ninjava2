@@ -290,15 +290,14 @@ public class Terminal {
 				command(outPut);
 			}
 			
-			if (input.equals("n")) {
-				String copiedOutPut = outPut;				
+			if (input.equals("n")) {				
 				int lastIndexBeforeColor = outPut.lastIndexOf("H");
 				if (lastIndexBeforeColor == outPut.length() - 1) {
-					int vmi = outPut.lastIndexOf("\u2588");
-					int uj = vmi - 1;
+					int whitePixelFirstCoord = outPut.lastIndexOf("\u2588");
+					int indexOfH = whitePixelFirstCoord - 1;
 					String newundo = "";
 					for (int i = 0; i < outPut.length(); i++){
-						if (i != uj) {
+						if (i != indexOfH) {
 							newundo += outPut.charAt(i);
 						} else {
 							newundo += "H";							
